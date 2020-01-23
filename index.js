@@ -1,24 +1,25 @@
 'use strict';
 
-// module declarations
+// Module declarations
 const Discord = require('discord.js');
+const utils = require('./utils.js');
 const config = require('./config.json');
-//import in_allowed_channel from 'utils.js';
-const Utils = require('./utils.js');
+const fs = require('fs'); // file system
 
-// constant declarations
+// Constants
 const prefix = config.prefix;
-
-// helper function declarations
-
-function inAllowedChannel(channelname) {
-    let allowed = config.channels.allowed_channels;
-    allowed.join(config.channels.admin_channels);
-    return allowed.includes(channelname);
-}
 
 // Client code
 const client = new Discord.Client();
+
+// Find all available commands
+client.commands = new Discord.Collection(); // discord.js's Map but better
+
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+    client.commands.set(command.name, command);
+}
 
 client.once('ready', () => {
     console.log('Ready!');
@@ -30,19 +31,22 @@ client.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) {
         return;
     }
-    if (!Utils.in_allowed_channel(message.channel.id)) {
+    if (!utils.in_allowed_channel(message.channel.id)) {
         return;
     }
 
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
 
-    if (command === 'uwu') {
-        message.channel.send('owo');
-    } else if (command === 'owo') {
-        message.channel.send('uwu');
-    } else if (command === 'avatar') {
-        return message.channel.send(`<${message.author.displayAvatarURL}>`);
+    try {
+        const command_executor = client.commands.get(command);
+        if (!command_executor) {
+            console.error(`Invalid command sent from user id ${message.author.id}; Message content: ${message.content}`);
+            return;
+        }
+        client.commands.get(command).execute(message, args);
+    } catch (error) {
+        console.error(error);
     }
 });
 
