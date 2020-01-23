@@ -1,12 +1,15 @@
+/*
+ * Reply with message 'owo'
+ * @param message discord.js Message object
+ * @param args string[] arguments
+ */
+async function execute(message, args) {
+    message.channel.send('owo');
+}
+
 module.exports = {
 	name: 'uwu',
 	description: 'uwu',
-    /*
-     * Reply with message 'owo'
-     * @param message discord.js Message object
-     * @param args string[] arguments
-     */
-	execute(message, args) {
-		message.channel.send('owo');
-	},
+    guildOnly: false,
+    execute: execute,
 };

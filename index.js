@@ -27,24 +27,32 @@ client.once('ready', () => {
 
 client.login(config.token);
 
-client.on('message', message => {
+client.on('message', async message => {
     if (!message.content.startsWith(prefix) || message.author.bot) {
         return;
     }
-    if (!utils.in_allowed_channel(message.channel.id)) {
+    if (!utils.in_allowed_channel(message.channel.id) && message.channel.type === 'text') {
         return;
     }
 
     const args = message.content.slice(prefix.length).split(/ +/);
-    const command = args.shift().toLowerCase();
+    const commandName = args.shift().toLowerCase();
+
+    if (!client.commands.has(commandName)) {
+        console.error(`Invalid command sent from user id ${message.author.id}; Message content: ${message.content}`);
+        return;
+    }
+
+    const command = client.commands.get(commandName);
+
+    if (command.guildOnly && message.channel.type !== 'text') {
+        message.channel.send('This command can only be sent from a Discord server.');
+        return;
+    }
 
     try {
-        const command_executor = client.commands.get(command);
-        if (!command_executor) {
-            console.error(`Invalid command sent from user id ${message.author.id}; Message content: ${message.content}`);
-            return;
-        }
-        client.commands.get(command).execute(message, args);
+        await command.execute(message, args);
+        return;
     } catch (error) {
         console.error(error);
     }

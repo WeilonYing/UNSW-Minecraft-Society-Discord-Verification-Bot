@@ -8,5 +8,11 @@ function in_allowed_channel(channelname) {
     return allowed.includes(channelname);
 }
 
+function mention(userid) {
+    return `<@${userid}>`;
+}
+
+
 exports.in_allowed_channel = in_allowed_channel;
+exports.mention = mention;
 
