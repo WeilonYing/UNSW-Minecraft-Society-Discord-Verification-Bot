@@ -22,14 +22,20 @@ async function execute(message, args) {
         }
     }
 
-    // Check message is from a DM channel
-    if (message.channel.type !== 'dm') {
-        await message.channel.send(`${utils.mention(user.id)} For your privacy, please send this command by messaging me directly.`);
-        await message.delete();
+    try {
+        // Check message is from a DM channel
+        if (message.channel.type !== 'dm') {
+            await message.channel.send(`${utils.mention(user.id)} For your privacy, please send this command by messaging me directly.`);
+            await message.delete();
+            return;
+        }
+
+        message.channel.send('it went through');
+    } catch (error) {
+        utils.send_generic_error_message(user.id, message.channel);
+        console.error(error);
         return;
     }
-
-    message.channel.send('it went through');
     /*
     // Check message is from the correct guild
     const guild = message.channel.guild;

@@ -1,0 +1,11 @@
+{
+    "prefix": "!",
+    "channels": {
+        "allowed_channels": [],
+        "admin_channels": []
+    },
+    "guild_id": "",
+    "verified_rank_id": "",
+    "sendgrid_api_key": ""
+}
+
