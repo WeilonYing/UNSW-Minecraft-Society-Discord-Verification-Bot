@@ -4,6 +4,8 @@
     "channels": {
         "allowed_channels": ["669415606692347955"],
         "admin_channels": []
-    }
+    },
+    "guild_id": "669414957170819073",
+    "verified_rank_id": ""
 }
 

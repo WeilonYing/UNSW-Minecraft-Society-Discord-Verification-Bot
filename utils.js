@@ -8,6 +8,10 @@ function in_allowed_channel(channelname) {
     return allowed.includes(channelname);
 }
 
+/* Create a mention string for a user
+ * @param userid    int id of the user
+ * @return string
+ */
 function mention(userid) {
     return `<@${userid}>`;
 }
