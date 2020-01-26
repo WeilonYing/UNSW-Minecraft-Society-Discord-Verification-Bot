@@ -22,6 +22,15 @@ async function execute(message, args) {
         }
     }
 
+    // Check message is from a DM channel
+    if (message.channel.type !== 'dm') {
+        await message.channel.send(`${utils.mention(user.id)} For your privacy, please send this command by messaging me directly.`);
+        await message.delete();
+        return;
+    }
+
+    message.channel.send('it went through');
+    /*
     // Check message is from the correct guild
     const guild = message.channel.guild;
     try {
@@ -43,30 +52,15 @@ async function execute(message, args) {
             `Hello! Please type \`!verifyemail <your email address>\` here to begin the verification process for **${guild.name}**. ` +
             'Example: `!verifyemail johncitizen@some_email.com`');
     } catch (error) {
-        send_permission_error_message(user.id, message.channel);
         console.error(error);
         return;
     }
-}
-
-/* Send an error message explaining to the user why we can't DM them
- * @param userid    int     Discord ID of the user
- * @param channel   Channel discord.js object, the channel to message them on
- */
-function send_permission_error_message(userid, channel) {
-    const output =
-        `Hi ${utils.mention(userid)}. It looks I don't have permission to direct ` +
-        'message (DM) you. Please go into your User Settings > Privacy & Safety and enable ' +
-        'direct messaging from server members so I can start the verification process. \n' +
-        'If instead you would like to continue in read-only mode. You can safely disregard this message. ' +
-        'You may come back to this channel to verify later if you decide to.'
-
-    channel.send(output);
+    */
 }
 
 module.exports = {
-    name: 'verify',
-    description: 'Starts the verification process',
-    guildOnly: true,
+    name: 'verifyemail',
+    description: 'Sends a verification email to the user',
+    guildOnly: false,
     execute: execute,
 }
