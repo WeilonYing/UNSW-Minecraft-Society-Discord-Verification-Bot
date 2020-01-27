@@ -16,7 +16,7 @@ async function execute(message, args) {
         try {
             await user.createDM();
         } catch (error) {
-            send_permission_error_message(user.id, message.channel);
+            await utils.send_generic_error_message(user.id, message.channel);
             console.error(error);
             return;
         }
@@ -25,14 +25,17 @@ async function execute(message, args) {
     try {
         // Check message is from a DM channel
         if (message.channel.type !== 'dm') {
-            await message.channel.send(`${utils.mention(user.id)} For your privacy, please send this command by messaging me directly.`);
+            const reply = await message.channel.send(
+                `${utils.mention(user.id)} For your privacy, please send this command by messaging me directly. ` +
+                '(Your message here has been deleted)');
             await message.delete();
+            await utils.maybe_delete_message(reply);
             return;
         }
 
-        message.channel.send('it went through');
+        await message.channel.send('it went through');
     } catch (error) {
-        utils.send_generic_error_message(user.id, message.channel);
+        await utils.send_generic_error_message(user.id, message.channel);
         console.error(error);
         return;
     }

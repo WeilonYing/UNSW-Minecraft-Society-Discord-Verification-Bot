@@ -1,11 +1,14 @@
 {
     "prefix": "!",
+    "token": "",
     "channels": {
         "allowed_channels": [],
         "admin_channels": []
     },
     "guild_id": "",
     "verified_rank_id": "",
-    "sendgrid_api_key": ""
+    "sendgrid_api_key": "",
+    "sendgrid_template_key": "",
+    "delete_bot_reply_timeout": 30000
 }
 

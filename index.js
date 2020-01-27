@@ -54,6 +54,7 @@ client.on('message', async message => {
         await command.execute(message, args);
         return;
     } catch (error) {
+        await utils.send_generic_error_message(message.author.id, message.channel);
         console.error(error);
     }
 });

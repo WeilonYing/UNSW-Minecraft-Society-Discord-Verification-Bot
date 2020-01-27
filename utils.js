@@ -24,15 +24,35 @@ function mention(userid) {
  * @param userid    int     Discord ID of the user
  * @param channel   Channel discord.js object, the channel to message them on
  */
-function send_generic_error_message(userid, channel) {
+async function send_generic_error_message(userid, channel) {
     const output =
         `${mention(userid)} Sorry, an error has occurred. ` +
         'Please try again or message an admin if this keeps happening.';
 
-    channel.send(output);
+    await channel.send(output);
+}
+
+/* Delete a message depending on the delete_bot_reply_message setting
+ * If the setting value is 0 or greater, the message will be deleted after
+ * that value in milliseconds. Otherwise the message will not be
+ * deleted (i.e. if the setting value is -1)
+ *
+ * @param message   Message discord.js object, the mesasge to be deleted
+ */
+async function maybe_delete_message(message) {
+    try {
+        const timeout = config.delete_bot_reply_timeout;
+        if (timeout >= 0) {
+            await message.delete(timeout);
+        }
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 exports.in_allowed_channel = in_allowed_channel;
 exports.mention = mention;
 exports.send_generic_error_message = send_generic_error_message;
+exports.maybe_delete_message = maybe_delete_message;
+
 
