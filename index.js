@@ -2,6 +2,7 @@
 
 // Module declarations
 const Discord = require('discord.js');
+const BotState = require('./BotState.js');
 const utils = require('./utils.js');
 const config = require('./config.json');
 const fs = require('fs'); // file system
@@ -51,7 +52,8 @@ client.on('message', async message => {
     }
 
     try {
-        await command.execute(client, message, args);
+        const state = new BotState(client, null);
+        await command.execute(state, message, args);
         return;
     } catch (error) {
         await utils.send_generic_error_message(message.author.id, message.channel);

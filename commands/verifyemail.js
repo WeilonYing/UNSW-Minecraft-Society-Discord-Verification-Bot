@@ -7,10 +7,11 @@ const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-
 
 /*
  * Begins the user verification process
+ * @param state BotState object
  * @param message discord.js Message object
  * @param args string[] arguments
  */
-async function execute(client, message, args) {
+async function execute(state, message, args) {
     const user = message.author;
 
     // Establish DM channel
@@ -23,20 +24,6 @@ async function execute(client, message, args) {
             return;
         }
     }
-
-    // Test user provided an email arg
-    if (args.length !== 1) {
-        await message.channel.send('Please provide an email address. E.g. `!verifyemail johncitizen@some_email.com`');
-        return;
-    }
-    const email = args[0];
-
-    // Test that email is valid
-    if (!emailRegexp.test(email)) {
-        await message.channel.send('Please provide a valid email address.');
-        return;
-    }
-
 
     try {
         // Check message is from a DM channel
@@ -52,7 +39,7 @@ async function execute(client, message, args) {
         await message.channel.send('it went through');
 
         // Check that the guild the bot is in matches that in config.json
-        const guild = client.guilds.find(g => g.id === config.guild_id);
+        const guild = state.client.guilds.find(g => g.id === config.guild_id);
         if (!guild) {
             throw new Error('Bot is not in the supplied guild_id in config.json');
         }
@@ -62,8 +49,23 @@ async function execute(client, message, args) {
         if (!guildmember) {
             await message.channel.send(`You are not a member of **${guild.name}**. Please join the Discord server and try again`);
         }
-        await guildmember.addRole(config.verified_role_id, 'User successfully verified their role');
-        message.channel.send('You have been verified');
+
+        // Test user provided an email arg
+        if (args.length !== 1) {
+            await message.channel.send('Please provide an email address. E.g. `!verifyemail johncitizen@some_email.com`');
+            return;
+        }
+        const email = args[0];
+
+        // Test that email is valid
+        if (!emailRegexp.test(email)) {
+            await message.channel.send('Please provide a valid email address.');
+            return;
+        }
+
+        // Generate verification code
+        // Store verification code
+        // Send verification email
     } catch (error) {
         await utils.send_generic_error_message(user.id, message.channel);
         console.error(error);

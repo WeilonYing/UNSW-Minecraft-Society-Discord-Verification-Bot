@@ -5,11 +5,11 @@ const config = require('../config.json');
 
 /*
  * Begins the user verification process
- * @param client discord.js Client object
+ * @param state BotState object
  * @param message discord.js Message object
  * @param args string[] arguments
  */
-async function execute(client, message, args) {
+async function execute(state, message, args) {
     const user = message.author;
 
     // Establish DM channel

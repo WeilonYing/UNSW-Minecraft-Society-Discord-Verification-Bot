@@ -1,5 +1,6 @@
 /*
  * Reply with message 'uwu'
+ * @param state BotState object
  * @param message discord.js Message object
  * @param args string[] arguments
  */

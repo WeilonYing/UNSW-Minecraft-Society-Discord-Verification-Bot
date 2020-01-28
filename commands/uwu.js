@@ -1,10 +1,10 @@
 /*
  * Reply with message 'owo'
- * @param client discord.js Client object
+ * @param state BotState object
  * @param message discord.js Message object
  * @param args string[] arguments
  */
-async function execute(client, message, args) {
+async function execute(state, message, args) {
     message.channel.send('owo');
 }
 
