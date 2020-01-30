@@ -1,7 +1,12 @@
 'use strict';
 
+// eslint
+/* global require */
+/* eslint no-undef: "error" */
+
 // Module declarations
 const Discord = require('discord.js');
+const Keyv = require('keyv');
 const BotState = require('./BotState.js');
 const utils = require('./utils.js');
 const config = require('./config.json');
@@ -12,6 +17,8 @@ const prefix = config.prefix;
 
 // Client code
 const client = new Discord.Client();
+const keyv = new Keyv(config.storage_uri);
+keyv.on('error', err => console.error('Keyv connection error:', err));
 
 // Find all available commands
 client.commands = new Discord.Collection(); // discord.js's Map but better
@@ -52,7 +59,7 @@ client.on('message', async message => {
     }
 
     try {
-        const state = new BotState(client, null);
+        const state = new BotState(client, keyv);
         await command.execute(state, message, args);
         return;
     } catch (error) {
@@ -60,6 +67,4 @@ client.on('message', async message => {
         console.error(error);
     }
 });
-
-
 

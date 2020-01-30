@@ -2,6 +2,13 @@
 
 const config = require('./config.json');
 
+/* Add verified role to guild member
+ * @param guildmember discord.js GuildMember object
+ */
+async function addVerifiedRoleToGuildMember(guildmember) {
+    await guildmember.addRole(config.verified_role_id);
+}
+
 /* Test that channel_id is in allowed channels as defined in config.json
  * @param channel_id    int channel id
  * @return  boolean true if channel id is allowed
@@ -50,6 +57,7 @@ async function maybe_delete_message(message) {
     }
 }
 
+exports.addVerifiedRoleToGuildMember = addVerifiedRoleToGuildMember;
 exports.in_allowed_channel = in_allowed_channel;
 exports.mention = mention;
 exports.send_generic_error_message = send_generic_error_message;
