@@ -1,5 +1,5 @@
 {
-  "name": "uwubot",
+  "name": "UNSW Minecraft Society Discord Verification Bot",
   "version": "1.0.0",
   "description": "owo",
   "main": "index.js",
@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@keyv/sqlite": "^2.0.2",
+    "@sendgrid/mail": "^6.5.1",
     "discord.js": "^11.5.1",
     "keyv": "^4.0.0",
     "uuid": "^3.4.0"

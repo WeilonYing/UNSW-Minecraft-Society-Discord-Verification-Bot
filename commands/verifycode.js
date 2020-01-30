@@ -67,10 +67,11 @@ async function execute(state, message, args) {
         await message.channel.send(
             'The code was incorrect or expired. Please enter again or restart the verification process ' +
             'with `!verifyemail <email>`');
-    } else {
-        await utils.addVerifiedRoleToGuildMember(guildmember);
-        await message.channel.send(`Verification successful. Welcome to **${guild.name}**!`);
+        return;
     }
+
+    await utils.addVerifiedRoleToGuildMember(guildmember);
+    await message.channel.send(`Verification successful. Welcome to **${guild.name}**!`);
 
     verification_user.verified = true;
 

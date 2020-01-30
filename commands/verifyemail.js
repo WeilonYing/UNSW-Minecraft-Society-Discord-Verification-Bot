@@ -86,12 +86,21 @@ async function execute(state, message, args) {
     verification_user
         .setUserId(user.id)
         .setEmail(email)
-        .setVerificationCode(verification_code, 30000);
+        .setVerificationCode(verification_code, 60000*60*24); // expiry set to 24 hours
     verification_user_json = verification_user.toJson();
     await state.keyv.set(user.id, verification_user_json);
 
     // Send verification email
-    await message.channel.send(verification_code);
+    await message.channel.send(`Thanks! An email has been sent to ${email} with your verification code.`);
+    const msg = {
+        to: `${email}`,
+        from: 'unswminecraftexecs@gmail.com',
+        subject: 'UNSW Minecraft Society - Discord Verification Code',
+        text: `Your verification code is ${verification_code}. Please send "!verifycode <your verification code>" to the verification bot.`,
+        html: `<strong>Your verification code is ${verification_code}. Please sent "!verifycode <your verification code>" to the verification bot.</strong>`,
+    };
+    state.sgMail.send(msg);
+
 }
 
 module.exports = {
@@ -100,3 +109,4 @@ module.exports = {
     guildOnly: false,
     execute: execute,
 }
+
