@@ -8,7 +8,7 @@
     "guild_id": "",
     "verified_role_id": "",
     "sendgrid_api_key": "",
-    "sendgrid_template_key": "",
+    "sendgrid_template_id": "",
     "delete_bot_reply_timeout": 30000,
     "storage_uri": ""
 }

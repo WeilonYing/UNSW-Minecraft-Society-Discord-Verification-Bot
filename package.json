@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@keyv/sqlite": "^2.0.2",
+    "@sendgrid/client": "^6.5.1",
     "@sendgrid/mail": "^6.5.1",
     "discord.js": "^11.5.1",
     "keyv": "^4.0.0",

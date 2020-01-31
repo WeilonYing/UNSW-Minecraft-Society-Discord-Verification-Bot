@@ -80,7 +80,7 @@ async function execute(state, message, args) {
     }
 
     // Generate verification code
-    const verification_code = uuidv4(); // TODO remove
+    const verification_code = uuidv4();
     // Store verification code
     verification_user = new VerificationUser();
     verification_user
@@ -91,16 +91,40 @@ async function execute(state, message, args) {
     await state.keyv.set(user.id, verification_user_json);
 
     // Send verification email
-    await message.channel.send(`Thanks! An email has been sent to ${email} with your verification code.`);
-    const msg = {
-        to: `${email}`,
-        from: 'unswminecraftexecs@gmail.com',
-        subject: 'UNSW Minecraft Society - Discord Verification Code',
-        text: `Your verification code is ${verification_code}. Please send "!verifycode <your verification code>" to the verification bot.`,
-        html: `<strong>Your verification code is ${verification_code}. Please sent "!verifycode <your verification code>" to the verification bot.</strong>`,
+    await message.channel.send(
+        `Thanks! An email has been sent to ${email} with your verification code. ` +
+        'Once you receive your verification code, enter it here with `!verifycode <code>`');
+    const email_data = {
+        "from": {
+            "email":`${config.email.from_email}`,
+            "name":`${config.email.from_name}`
+        },
+        "personalizations": [
+            {
+                "to": [
+                    {
+                        "email": `${email}`
+                    }
+                ],
+                "dynamic_template_data": {
+                    "verification_code": verification_code
+                }
+            }
+        ],
+        "template_id": `${config.email.sendgrid_template_id}`
     };
-    state.sgMail.send(msg);
 
+    const email_request = {
+        "body": email_data,
+        "method": "POST",
+        "url": "/v3/mail/send"
+    };
+
+    state.sgClient.request(email_request)
+        .then(([response, body]) => {
+            console.log(`Email sent to ${email}. Got back response ${response.statusCode}`);
+            console.log(response.body);
+        });
 }
 
 module.exports = {

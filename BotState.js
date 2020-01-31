@@ -5,12 +5,12 @@ class BotState {
     /* Constructor
      * @param client discord.js Client object
      * @param keyv Keyv object
-     * @param sgMail SendGrid mail object
+     * @param sgClient SendGrid client object
      */
-    constructor(client, keyv, sgMail) {
+    constructor(client, keyv, sgClient) {
         this.client = client;
         this.keyv = keyv;
-        this.sgMail = sgMail;
+        this.sgClient = sgClient;
     }
 }
 
