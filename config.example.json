@@ -7,8 +7,12 @@
     },
     "guild_id": "",
     "verified_role_id": "",
-    "sendgrid_api_key": "",
-    "sendgrid_template_id": "",
+    "email": {
+        "sendgrid_api_key": "",
+        "sendgrid_template_id": "",
+        "from_email": "",
+        "from_name": ""
+    },
     "delete_bot_reply_timeout": 30000,
     "storage_uri": ""
 }
