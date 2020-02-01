@@ -41,8 +41,9 @@ async function execute(state, message, args) {
     // Message user
     try {
         await user.send(
-            `Hello! Please type \`!verifyemail <your email address>\` here to begin the verification process for **${guild.name}**. ` +
-            'Example: `!verifyemail johncitizen@some_email.com`');
+            `Hello! To begin the verification process for **${guild.name}**, please do one of the following: \n` +
+            '- If you are a UNSW student, please type `!verifyunsw <your student zID>`. E.g. !verifyunsw z0000000 \n' +
+            '- If you are not a UNSW student, please type `!verifyemail <your email address>`. E.g. !verifyemail johncitizen@some_email.com');
     } catch (error) {
         await send_permission_error_message(user.id, message.channel);
         console.error(error);

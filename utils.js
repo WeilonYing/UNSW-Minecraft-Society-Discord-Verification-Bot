@@ -2,6 +2,46 @@
 
 const config = require('./config.json');
 
+/* Send verification email to user
+ * @param to_email          string  email address to send to
+ * @param verification_code string  verification code to be sent to user
+ * @param sgClient          object  SendGrid Client object
+ */
+async function sendVerificationEmailToUser(
+    to_email,
+    verification_code,
+    sgClient
+) {
+    const email_data = {
+        "from": {
+            "email":`${config.email.from_email}`,
+            "name":`${config.email.from_name}`
+        },
+        "personalizations": [
+            {
+                "to": [
+                    {
+                        "email": `${to_email}`
+                    }
+                ],
+                "dynamic_template_data": {
+                    "verification_code": verification_code
+                }
+            }
+        ],
+        "template_id": `${config.email.sendgrid_template_id}`
+    };
+
+    const email_request = {
+        "body": email_data,
+        "method": "POST",
+        "url": "/v3/mail/send"
+    };
+
+    const response = await sgClient.request(email_request);
+    console.log(`Email sent to ${to_email}. Got back response ${response}`);
+}
+
 /* Add verified role to guild member
  * @param guildmember discord.js GuildMember object
  */
@@ -10,13 +50,21 @@ async function addVerifiedRoleToGuildMember(guildmember) {
 }
 
 /* Test that channel_id is in allowed channels as defined in config.json
- * @param channel_id    int channel id
+ * @param   channel_id   string channel id
  * @return  boolean true if channel id is allowed
  */
 function in_allowed_channel(channel_id) {
     let allowed = config.channels.allowed_channels;
-    allowed.join(config.channels.admin_channels);
-    return allowed.includes(channel_id);
+    return allowed.includes(channel_id) || in_admin_channel(channel_id);
+}
+
+/* Test that channel_id is in allowed channels as defined in config.json
+ * @param   channel_id   string channel id
+ * @return  boolean true if channel id is allowed
+ */
+function in_admin_channel(channel_id) {
+    let admin_channels = config.channels.admin_channels;
+    return admin_channels.includes(channel_id);
 }
 
 /* Create a mention string for a user
@@ -57,8 +105,10 @@ async function maybe_delete_message(message) {
     }
 }
 
+exports.sendVerificationEmailToUser = sendVerificationEmailToUser;
 exports.addVerifiedRoleToGuildMember = addVerifiedRoleToGuildMember;
 exports.in_allowed_channel = in_allowed_channel;
+exports.in_admin_channel = in_admin_channel;
 exports.mention = mention;
 exports.send_generic_error_message = send_generic_error_message;
 exports.maybe_delete_message = maybe_delete_message;

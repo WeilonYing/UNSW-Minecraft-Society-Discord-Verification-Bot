@@ -9,10 +9,10 @@ const utils = require('../utils.js');
 const config = require('../config.json');
 const VerificationUser = require('../VerificationUser.js');
 
-const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+const zIdRegexp = /^z[0-9]{7}$/;
 
 /*
- * Begins the user verification process
+ * Begins the user verification process for UNSW students
  * @param state BotState object
  * @param message discord.js Message object
  * @param args string[] arguments
@@ -53,18 +53,20 @@ async function execute(state, message, args) {
         await message.channel.send(`You are not a member of **${guild.name}**. Please join the Discord server and try again`);
     }
 
-    // Test user provided an email arg
+    // Test user provided a zID arg
     if (args.length !== 1) {
-        await message.channel.send('Please provide an email address. E.g. `!verifyemail johncitizen@some_email.com`');
+        await message.channel.send('Please provide your UNSW zID. E.g. `!verifyunsw z0000000`');
         return;
     }
-    const email = args[0];
+    const zID = args[0];
 
-    // Test that email is valid
-    if (!emailRegexp.test(email)) {
-        await message.channel.send('Please provide a valid email address.');
+    // Test that zID is valid
+    if (!zIdRegexp.test(zID)) {
+        await message.channel.send('Please provide a valid UNSW zID. E.g. z0000000');
         return;
     }
+
+    const email = `${zID}@ad.unsw.edu.au`;
 
     // Test that user is currently not verified
     let verification_user_json = await state.keyv.get(user.id);
@@ -81,6 +83,7 @@ async function execute(state, message, args) {
 
     // Generate verification code
     const verification_code = uuidv4();
+
     // Store verification code
     verification_user = new VerificationUser();
     verification_user
@@ -91,16 +94,15 @@ async function execute(state, message, args) {
     await state.keyv.set(user.id, verification_user_json);
 
     // Send verification email
-    await message.channel.send(
-        `Thanks! An email has been sent to ${email} with your verification code. ` +
-        'Once you receive your verification code, enter it here with `!verifycode <code>`');
     await utils.sendVerificationEmailToUser(email, verification_code, state.sgClient);
-
+    await message.channel.send(
+        `Thanks! An email has been sent to the UNSW email address for **${zID}** with your verification code. ` +
+        'Once you receive your verification code, enter it here with `!verifycode <code>`');
 }
 
 module.exports = {
-    name: 'verifyemail',
-    description: 'Sends a verification email to the user',
+    name: 'verifyunsw',
+    description: 'Sends a verification email to the user via UNSW email',
     guildOnly: false,
     execute: execute,
 }

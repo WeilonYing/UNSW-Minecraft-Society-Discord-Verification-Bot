@@ -42,6 +42,8 @@ client.on('message', async message => {
     if (!message.content.startsWith(prefix) || message.author.bot) {
         return;
     }
+
+    // Check if in allowed guild channel. Note: DM channel types are 'dm', so they're allowed too
     if (!utils.in_allowed_channel(message.channel.id) && message.channel.type === 'text') {
         return;
     }
@@ -57,7 +59,8 @@ client.on('message', async message => {
     const command = client.commands.get(commandName);
 
     if (command.guildOnly && message.channel.type !== 'text') {
-        message.channel.send('This command can only be sent from a Discord server.');
+        const reply = await message.channel.send('This command can only be sent from a Discord server.');
+        await utils.maybe_delete_message(reply);
         return;
     }
 
