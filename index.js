@@ -8,6 +8,7 @@
 const Discord = require('discord.js');
 const Keyv = require('keyv');
 const sgClient = require('@sendgrid/client');
+const request = require('request');
 const BotState = require('./BotState.js');
 const utils = require('./utils.js');
 const config = require('./config.json');
@@ -65,7 +66,7 @@ client.on('message', async message => {
     }
 
     try {
-        const state = new BotState(client, keyv, sgClient);
+        const state = new BotState(client, keyv, sgClient, request);
         await command.execute(state, message, args);
         return;
     } catch (error) {

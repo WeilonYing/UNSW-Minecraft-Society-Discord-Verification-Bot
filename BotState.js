@@ -6,11 +6,13 @@ class BotState {
      * @param client discord.js Client object
      * @param keyv Keyv object
      * @param sgClient SendGrid client object
+     * @param request Request module object
      */
-    constructor(client, keyv, sgClient) {
+    constructor(client, keyv, sgClient, request) {
         this.client = client;
         this.keyv = keyv;
         this.sgClient = sgClient;
+        this.request = request;
     }
 }
 
