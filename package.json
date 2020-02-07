@@ -1,12 +1,12 @@
 {
-  "name": "UNSW Minecraft Society Discord Verification Bot",
-  "version": "1.0.0",
+  "name": "UNSW-Minecraft-Society-Discord-Verification-Bot",
+  "version": "2.0",
   "description": "owo",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "WeilonYing",
   "license": "ISC",
   "dependencies": {
     "@keyv/sqlite": "^2.0.2",
