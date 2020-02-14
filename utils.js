@@ -75,16 +75,28 @@ function mention(userid) {
     return `<@${userid}>`;
 }
 
+/* Send a message stating they don't have permission
+ * @param channel   Channel discord.js object, the channel to message them on
+ * @return message  Message discord.js object
+ */
+async function send_no_permission_message(channel) {
+    const output = 'You do not have permission to use this command.';
+    const message = await channel.send(output);
+    return message;
+}
+
 /* Send a generic error message explaining to the user
  * @param userid    int     Discord ID of the user
  * @param channel   Channel discord.js object, the channel to message them on
+ * @return message  Message discord.js object
  */
 async function send_generic_error_message(userid, channel) {
     const output =
         `${mention(userid)} Sorry, an error has occurred. ` +
         'Please try again or message an admin if this keeps happening.';
 
-    await channel.send(output);
+    const message = await channel.send(output);
+    return message;
 }
 
 /* Delete a message depending on the delete_bot_reply_message setting
@@ -110,6 +122,7 @@ exports.addVerifiedRoleToGuildMember = addVerifiedRoleToGuildMember;
 exports.in_allowed_channel = in_allowed_channel;
 exports.in_admin_channel = in_admin_channel;
 exports.mention = mention;
+exports.send_no_permission_message = send_no_permission_message;
 exports.send_generic_error_message = send_generic_error_message;
 exports.maybe_delete_message = maybe_delete_message;
 
