@@ -41,11 +41,21 @@ async function execute(state, message, args) {
     // Message user
     try {
         await user.send(
-            `Hello! To begin the verification process for **${guild.name}**, please fill out our membership signup form: ${config.signup_form_url} \n` +
-            '**If you have already done so**, you can continue to the steps below.\n\n' +
+            `Welcome to ${guild.name}. \n` +
+            '***If you have already filled out the membership/whitelist form***, an email has been sent to the address ' +
+            'provided on the form. **FOR UNSW STUDENTS, that email has been sent to your UNSW email inbox ' +
+            '(z1234567@ad.unsw.edu.au)**. A verification code is provided in the email sent to you. \n\n' +
 
-            'After you\'ve filled out the form, please enter the verification code sent to your email provided in the form. \n' +
-            'The verification code should be in this format: `!verify xxxxxxxxxxxxxxxxxxxx xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`');
+            'The verification code should be in this format: ' +
+            '`!verify xxxxxxxxxxxxxxxxxxxx xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` \n' +
+            'DM this command + code here to get verified. \n\n' +
+
+            `***If you have not filled out the form:*** you can do so here ${config.signup_form_url}, ` +
+            'and then follow the instructions above. \n\n' +
+
+            'If you are having problems with verifying please @exec in the #verification chat.\n' +
+            'You do not need to verify to play on our Minecraft server: mc.unswminecraft.com'
+        );
     } catch (error) {
         await send_permission_error_message(user.id, message.channel);
         console.error(error);
