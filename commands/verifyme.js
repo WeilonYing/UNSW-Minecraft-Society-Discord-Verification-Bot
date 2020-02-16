@@ -25,17 +25,11 @@ async function execute(state, message, args) {
 
     // Check message is from the correct guild
     const guild = message.channel.guild;
-    try {
-        if (message.channel.type !== 'text') {
-            throw new TypeException("Channel type must be 'text'", 'verify.js');
-        }
-        if (guild.id !== config.guild_id) {
-            throw new Error('Verification sent from invalid guild. Verification can only be done from the guild set in guild_id in config.json');
-        }
-    } catch (error) {
-        console.error(error);
-        await utils.send_generic_error_message(user.id, message.channel);
-        return;
+    if (message.channel.type !== 'text') {
+        throw new TypeException("Channel type must be 'text'", 'verify.js');
+    }
+    if (guild.id !== config.guild_id) {
+        throw new Error('Verification sent from invalid guild. Verification can only be done from the guild set in guild_id in config.json');
     }
 
     // Message user

@@ -67,6 +67,30 @@ function in_admin_channel(channel_id) {
     return admin_channels.includes(channel_id);
 }
 
+/* Test that the given role is of exec role or higher. The exec role's id
+ * must be defined in config.json
+ * @param   guild_roles     discord.js Roles collection: Available roles in the guild
+ * @param   member_roles    discord.js Roles collection: The member's roles to check against
+ * @return  boolean true if the role is exec or higher, false otherwise
+ */
+function is_exec_or_higher(guild_roles, member_roles) {
+    const exec_role = guild_roles.get(config.exec_role_id);
+    if (!exec_role) {
+        throw new Error('Exec role not in given guild roles');
+    }
+    for (let i = 0; i < member_roles.length; i++) {
+        const current_role = member_roles[i];
+        // If exec role is <= 0, then exec role is lower or equal to the given role
+        if (exec_role.comparePositionTo(current_role) <= 0) {
+            return true;
+        }
+    }
+
+    // If exec role is > 0, then exec role is higher than the given role
+    // Therefore they are not an exec or higher.
+    return false;
+}
+
 /* Create a mention string for a user
  * @param userid    int id of the user
  * @return string
@@ -75,16 +99,28 @@ function mention(userid) {
     return `<@${userid}>`;
 }
 
+/* Send a message stating they don't have permission
+ * @param channel   Channel discord.js object, the channel to message them on
+ * @return message  Message discord.js object
+ */
+async function send_no_permission_message(channel) {
+    const output = 'You do not have permission to use this command.';
+    const message = await channel.send(output);
+    return message;
+}
+
 /* Send a generic error message explaining to the user
  * @param userid    int     Discord ID of the user
  * @param channel   Channel discord.js object, the channel to message them on
+ * @return message  Message discord.js object
  */
 async function send_generic_error_message(userid, channel) {
     const output =
         `${mention(userid)} Sorry, an error has occurred. ` +
         'Please try again or message an admin if this keeps happening.';
 
-    await channel.send(output);
+    const message = await channel.send(output);
+    return message;
 }
 
 /* Delete a message depending on the delete_bot_reply_message setting
@@ -109,7 +145,9 @@ exports.sendVerificationEmailToUser = sendVerificationEmailToUser;
 exports.addVerifiedRoleToGuildMember = addVerifiedRoleToGuildMember;
 exports.in_allowed_channel = in_allowed_channel;
 exports.in_admin_channel = in_admin_channel;
+exports.is_exec_or_higher = is_exec_or_higher;
 exports.mention = mention;
+exports.send_no_permission_message = send_no_permission_message;
 exports.send_generic_error_message = send_generic_error_message;
 exports.maybe_delete_message = maybe_delete_message;
 
