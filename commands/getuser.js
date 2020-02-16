@@ -32,7 +32,7 @@ async function execute(state, message, args) {
 
     // Test that command has correct number of arguments
     if (args.length !== 2) {
-        const reply = await message.channel.send(
+        const reply = await channel.send(
             'Usage: !getuser <discord|minecraft> <discord_id|minecraft_username>');
         await utils.maybe_delete_message(reply);
         return;
@@ -40,13 +40,17 @@ async function execute(state, message, args) {
 
     const type = args[0];
 
-    if (type !== 'discord') {
-        await message.channel.send("This option isn't supported yet");
-        return;
-    }
+    const request_data = {};
 
-    const request_data = {
-        "discord_id": args[1]
+    if (type === 'discord') {
+        request_data['discord_id'] = args[1];
+    } else if (type === 'minecraft') {
+        request_data['minecraft_username'] = args[1];
+    } else {
+        const reply = await channel.send(
+            'Usage: !getuser <discord|minecraft> <discord_id|minecraft_username>');
+        await utils.maybe_delete_message(reply);
+        return;
     }
 
     // There's a chance the verification request may take more than a few seconds, so let the user know that we're
@@ -54,10 +58,11 @@ async function execute(state, message, args) {
 
     // Send verification request
     try {
+        const loading_message = await channel.send('Getting user...');
         state.request(
             // Request options and payload
             {
-                url: config.find_discord_user_url,
+                url: config.find_user_url,
                 method: "POST",
                 json: request_data,
                 auth: {
@@ -67,6 +72,10 @@ async function execute(state, message, args) {
 
             // Callback to process resposne
             async (error, response, body) => {
+                // Get rid of loading message
+                await loading_message.delete();
+
+                // Parse results
                 const results = body.results;
                 if (results.length === 0) {
                     await channel.send('No entries found for this user id')
