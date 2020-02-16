@@ -53,15 +53,18 @@ async function execute(state, message, args) {
     const type = args[0];
     const request_data = {};
 
-    if (type === 'discord') {
-        request_data['discord_id'] = args[1];
-    } else if (type === 'minecraft') {
-        request_data['minecraft_username'] = args[1];
-    } else {
-        const reply = await channel.send(
-            'Usage: !getuser <discord|minecraft> <discord_id|minecraft_username>');
-        await utils.maybe_delete_message(reply);
-        return;
+    switch(type) {
+        case 'discord':
+            request_data['discord_id'] = args[1];
+            break;
+        case 'minecraft':
+            request_data['minecraft_username'] = args[1];
+            break;
+        default:
+            const reply = await channel.send(
+                'Usage: !getuser <discord|minecraft> <discord_id|minecraft_username>');
+            await utils.maybe_delete_message(reply);
+            return;
     }
 
     try {
