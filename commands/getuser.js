@@ -22,9 +22,21 @@ async function execute(state, message, args) {
     const user = message.author;
     const channel = message.channel;
     const guild = channel.guild;
+
+    // Check message is from the correct guild
+    if (channel.type !== 'text') {
+        throw new TypeException("Channel type must be 'text'", 'getuser.js');
+    }
+    if (guild.id !== config.guild_id) {
+        throw new Error('Verification sent from invalid guild. Verification can only be done from the guild set in guild_id in config.json');
+    }
+
+    // Check command sender is Administrator or has the exec role or higher
     const guildmember = guild.member(message.author);
 
-    if (!guildmember.hasPermission('VIEW_AUDIT_LOG')) {
+    if (!utils.is_exec_or_higher(guild.roles, guildmember.roles)
+        && !guildmember.hasPermission('ADMINISTRATOR')) {
+
         const reply = await utils.send_no_permission_message(channel);
         await utils.maybe_delete_message(reply);
         return;
@@ -39,7 +51,6 @@ async function execute(state, message, args) {
     }
 
     const type = args[0];
-
     const request_data = {};
 
     if (type === 'discord') {
@@ -53,12 +64,11 @@ async function execute(state, message, args) {
         return;
     }
 
-    // There's a chance the verification request may take more than a few seconds, so let the user know that we're
-    // processing the verification
-
-    // Send verification request
     try {
+        // Searching user will take some time, so let the user know that we're processing it.
         const loading_message = await channel.send('Getting user...');
+
+        // Make search request
         state.request(
             // Request options and payload
             {
@@ -83,7 +93,7 @@ async function execute(state, message, args) {
                 let message = '';
                 for (let i = 0; i < results.length; i++) {
                     message += `**Entry ${i}** \n`
-                    message += JSON.stringify(results[i], null, '\t') + '\n';
+                    message += '```' + JSON.stringify(results[i], null, '\t') + '```\n';
                     if (i % 3 === 0) {
                         await channel.send(message);
                         message = ''
@@ -100,10 +110,10 @@ async function execute(state, message, args) {
     }
 }
 
-
 module.exports = {
     name: 'getuser',
     description: 'Gets user either by Discord ID or Minecraft username',
     guildOnly: true,
     execute: execute,
 }
+

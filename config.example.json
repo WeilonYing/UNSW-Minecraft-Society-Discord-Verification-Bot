@@ -6,6 +6,7 @@
         "admin_channels": []
     },
     "guild_id": "",
+    "exec_role_id": "",
     "verified_role_id": "",
     "email": {
         "sendgrid_api_key": "",
@@ -14,7 +15,9 @@
         "from_name": ""
     },
     "delete_bot_reply_timeout": 30000,
+    "url_api_key": "",
     "verify_url": "",
+    "find_user_url": "",
     "signup_form_url": ""
 }
 
