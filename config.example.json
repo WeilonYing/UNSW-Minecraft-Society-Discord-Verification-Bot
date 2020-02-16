@@ -9,8 +9,6 @@
     "exec_role_id": "",
     "verified_role_id": "",
     "email": {
-        "sendgrid_api_key": "",
-        "sendgrid_template_id": "",
         "from_email": "",
         "from_name": ""
     },

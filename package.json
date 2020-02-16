@@ -9,8 +9,6 @@
   "author": "WeilonYing",
   "license": "ISC",
   "dependencies": {
-    "@sendgrid/client": "^6.5.1",
-    "@sendgrid/mail": "^6.5.1",
     "discord.js": "^11.5.1",
     "request": "^2.88.0",
     "uuid": "^3.4.0"
