@@ -6,7 +6,6 @@
 
 // Module declarations
 const Discord = require('discord.js');
-const Keyv = require('keyv');
 const sgClient = require('@sendgrid/client');
 const request = require('request');
 const BotState = require('./BotState.js');
@@ -19,8 +18,6 @@ const prefix = config.prefix;
 
 // Client code
 const client = new Discord.Client();
-const keyv = new Keyv(config.storage_uri);
-keyv.on('error', err => console.error('Keyv connection error:', err));
 sgClient.setApiKey(config.email.sendgrid_api_key);
 sgClient.setDefaultRequest('baseUrl', 'https://api.sendgrid.com/');
 
@@ -66,7 +63,7 @@ client.on('message', async message => {
     }
 
     try {
-        const state = new BotState(client, keyv, sgClient, request);
+        const state = new BotState(client, sgClient, request);
         await command.execute(state, message, args);
         return;
     } catch (error) {
