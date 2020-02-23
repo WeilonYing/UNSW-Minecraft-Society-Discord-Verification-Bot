@@ -22,4 +22,16 @@ Make a copy of `config.example.json` and name it `config.json`. Then add your se
 | `find_user_url` | The URL the bot should use to retrieve user information | `https://your_find_user_url_here.com/endpoint/` |
 | `signup_form_url` | URL to your signup form | `https://your_form_url_here.com` |
 
+## How to start
 
+To run this bot you will need to have Node.js install which can be downloaded [here](https://nodejs.org/en/)
+
+To install the dependencies run this in the terminal:
+```shell
+npm install
+```
+
+To run the bot run this in the terminal:
+```shell
+npm start
+```
