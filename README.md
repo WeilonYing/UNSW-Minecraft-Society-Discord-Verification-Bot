@@ -1,6 +1,27 @@
 # UNSW-Minecraft-Society-Discord-Verification-Bot
 Email verification bot for UNSW Minecraft Society's Discord server
 
+## Development setup
+
+To run this bot you will need to have Node.js installed, which can be downloaded [here](https://nodejs.org/en/). Using Node Version Manager (nvm) is recommended.
+
+To install the dependencies run this in the terminal:
+```shell
+npm install
+```
+
+To run the bot run this in the terminal:
+```shell
+npm start
+```
+
+## Deployment
+
+A simple and fairly reliable way to deploy this bot is to use (Process Manager 2)[https://pm2.keymetrics.io/]. Possible deployment method:
+1. Install PM2 globally: `npm install -g pm2`
+2. Run the included startup script: `./startbot.sh`
+
+
 ## Configuration
 
 Make a copy of `config.example.json` and name it `config.json`. Then add your settings.
@@ -21,17 +42,3 @@ Make a copy of `config.example.json` and name it `config.json`. Then add your se
 | `verify_url` | The URL the bot should use to send a verification request | `https://your_verification_url_here.com/endpoint/` |
 | `find_user_url` | The URL the bot should use to retrieve user information | `https://your_find_user_url_here.com/endpoint/` |
 | `signup_form_url` | URL to your signup form | `https://your_form_url_here.com` |
-
-## How to start
-
-To run this bot you will need to have Node.js install which can be downloaded [here](https://nodejs.org/en/)
-
-To install the dependencies run this in the terminal:
-```shell
-npm install
-```
-
-To run the bot run this in the terminal:
-```shell
-npm start
-```
