@@ -78,8 +78,9 @@ function is_exec_or_higher(guild_roles, member_roles) {
     if (!exec_role) {
         throw new Error('Exec role not in given guild roles');
     }
-    for (let i = 0; i < member_roles.length; i++) {
-        const current_role = member_roles[i];
+    const key_array = member_roles.keyArray();
+    for (let i = 0; i < key_array.length; i++) {
+        const current_role = member_roles.get(key_array[i]);
         // If exec role is <= 0, then exec role is lower or equal to the given role
         if (exec_role.comparePositionTo(current_role) <= 0) {
             return true;
