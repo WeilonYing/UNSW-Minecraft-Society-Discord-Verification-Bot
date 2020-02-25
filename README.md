@@ -17,7 +17,7 @@ npm start
 
 ## Deployment
 
-A simple and fairly reliable way to deploy this bot is to use (Process Manager 2)[https://pm2.keymetrics.io/]. Possible deployment method:
+A simple and fairly reliable way to deploy this bot is to use [Process Manager 2](https://pm2.keymetrics.io/). Possible deployment method:
 1. Install PM2 globally: `npm install -g pm2`
 2. Run the included startup script: `./startbot.sh`
 
