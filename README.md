@@ -10,10 +10,14 @@ To install the dependencies run this in the terminal:
 npm install
 ```
 
-To run the bot run this in the terminal:
+To start the bot, run this in the terminal:
 ```shell
 npm start
 ```
+
+The bot uses the DiscordJS library. You may find documentation and guides on using the library here: 
+- https://discordjs.guide/
+- https://discord.js.org
 
 ## Deployment
 
