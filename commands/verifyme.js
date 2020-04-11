@@ -38,7 +38,7 @@ async function execute(state, message, args) {
             `Welcome to ${guild.name}. \n` +
             '***If you have already filled out the membership/whitelist form***, an email has been sent to the address ' +
             'provided on the form. **FOR UNSW STUDENTS, that email has been sent to your UNSW email inbox ' +
-            '(z1234567@ad.unsw.edu.au)**. A verification code is provided in the email sent to you. \n\n' +
+            '(z1234567@ad.unsw.edu.au)**. A verification code is provided in the email sent to you. **(CHECK YOUR SPAM FOLDER)**\n\n' +
 
             'The verification code should be in this format: ' +
             '`!verify xxxxxxxxxxxxxxxxxxxx xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` \n' +
