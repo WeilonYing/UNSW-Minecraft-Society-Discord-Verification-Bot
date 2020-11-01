@@ -39,15 +39,16 @@ async function execute(state, message, args) {
     }
 
     // Check that the guild the bot is in matches that in config.json
-    const guild = state.client.guilds.find(g => g.id === config.guild_id);
+    const guild = await state.client.guilds.fetch(config.guild_id);
     if (!guild) {
         throw new Error('Bot is not in the supplied guild_id in config.json');
     }
 
     // Get user as guild member
-    const guildmember = guild.member(message.author);
+    const guildmember = await guild.members.fetch(message.author);
     if (!guildmember) {
         await message.channel.send(`You are not a member of **${guild.name}**. Please join the Discord server and try again`);
+        return;
     }
 
     // Test user provided a verification code arg
