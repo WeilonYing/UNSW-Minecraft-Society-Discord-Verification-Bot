@@ -46,7 +46,7 @@ async function sendVerificationEmailToUser(
  * @param guildmember discord.js GuildMember object
  */
 async function addVerifiedRoleToGuildMember(guildmember) {
-    await guildmember.addRole(config.verified_role_id);
+    await guildmember.roles.add(config.verified_role_id);
 }
 
 /* Test that channel_id is in allowed channels as defined in config.json
@@ -69,27 +69,18 @@ function in_admin_channel(channel_id) {
 
 /* Test that the given role is of exec role or higher. The exec role's id
  * must be defined in config.json
- * @param   guild_roles     discord.js Roles collection: Available roles in the guild
- * @param   member_roles    discord.js Roles collection: The member's roles to check against
+ * @param   guild_roles     discord.js RoleManager class: Available roles in the guild
+ * @param   member_roles    discord.js GuildMemberRoleManager class: The member's roles to check against
  * @return  boolean true if the role is exec or higher, false otherwise
  */
-function is_exec_or_higher(guild_roles, member_roles) {
-    const exec_role = guild_roles.get(config.exec_role_id);
+async function is_exec_or_higher(guild_roles, member_roles) {
+    const exec_role = await guild_roles.fetch(config.exec_role_id);
     if (!exec_role) {
         throw new Error('Exec role not in given guild roles');
     }
-    const key_array = member_roles.keyArray();
-    for (let i = 0; i < key_array.length; i++) {
-        const current_role = member_roles.get(key_array[i]);
-        // If exec role is <= 0, then exec role is lower or equal to the given role
-        if (exec_role.comparePositionTo(current_role) <= 0) {
-            return true;
-        }
-    }
-
     // If exec role is > 0, then exec role is higher than the given role
     // Therefore they are not an exec or higher.
-    return false;
+    return exec_role.comparePositionTo(member_roles.highest) <= 0;
 }
 
 /* Create a mention string for a user
