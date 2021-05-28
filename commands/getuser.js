@@ -33,9 +33,9 @@ async function execute(state, message, args) {
 
     // Check command sender is Administrator or has the exec role or higher
     const guildmember = guild.member(message.author);
-
-    if (!utils.is_exec_or_higher(guild.roles, guildmember.roles)
-        && !guildmember.hasPermission('ADMINISTRATOR')) {
+    
+    const isExecOrHigher = await utils.is_exec_or_higher(guild.roles, guildmember.roles);
+    if (!isExecOrHigher && !guildmember.hasPermission('ADMINISTRATOR')) {
 
         const reply = await utils.send_no_permission_message(channel);
         await utils.maybe_delete_message(reply);
