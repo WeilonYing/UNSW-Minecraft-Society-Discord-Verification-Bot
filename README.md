@@ -25,6 +25,8 @@ A simple and fairly reliable way to deploy this bot is to use [Process Manager 2
 1. Install PM2 globally: `npm install -g pm2`
 2. Run the included startup script: `./startbot.sh`
 
+Bot invite link: https://discordapp.com/oauth2/authorize?client_id=<APPLICATION ID>&scope=bot&permissions=268446784
+
 
 ## Configuration
 
